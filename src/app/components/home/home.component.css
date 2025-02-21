@@ -17,3 +17,22 @@
   border-bottom: 1px solid var(--primary);
   padding-bottom: 8px;
 }
+
+.title {
+  margin: 6rem 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: var(--primary);
+}
+
+.title h1 {
+  font-size: 3rem;
+
+}
+
+.title span {
+  font-size: 1.2rem;
+}

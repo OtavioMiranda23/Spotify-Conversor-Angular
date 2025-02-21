@@ -1,3 +1,8 @@
+<div class="title">
+    <h1>Converter do Spotify para o YouTube</h1>
+    <span>Converta rapidamente sua música do Spotify o YouTube</span>
+</div>
+
 <form class="form-principal" [formGroup]="formulario" (ngSubmit)="send()">
     <mat-form-field appearance="outline">
         <mat-label>Insira o link do Spotify da sua música</mat-label>
@@ -37,8 +42,5 @@
             <span>Autor: {{ artist }}</span>
         </div>
         <a target="_blank" [href]="track.link">{{ track.link }}</a>
-    </div>
-    <div *ngIf="isFetchError.value">
-        <span>{{ isFetchError.message }}</span>
     </div>
 </form>

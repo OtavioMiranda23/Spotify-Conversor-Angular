@@ -7,7 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { HttpService } from '../../services/http.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { fakeAsync } from '@angular/core/testing';
+import Notiflix from 'notiflix';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +19,7 @@ import { fakeAsync } from '@angular/core/testing';
     MatButtonModule, 
     MatFormFieldModule, 
     MatSelectModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
@@ -54,7 +54,11 @@ export class HomeComponent {
     value: false,
     message: ""
   };
-  constructor(private http: HttpService) {}
+  constructor(private http: HttpService) {
+    Notiflix.Notify.init({
+      position: 'center-top'
+    })
+  }
 
   send() {
     this.isLoading = true;
@@ -64,26 +68,28 @@ export class HomeComponent {
       link,
       siteValue: site
     };
-    try {
-      this.http.createYoutubeLink(body).subscribe(data => {
+    this.http.createYoutubeLink(body).subscribe({
+      next: (data) => {
         this.track = data;
         this.track.link = this.track.link.replace("%3F", "?").replace("%3D", "=");
         this.track.musicName = this.track.musicName.replaceAll("+", " ");
         this.track.albumsName = this.track.albumsName.replaceAll("+", " ");
-        this.track.artistsName.map(artist => artist.replaceAll("+"," "));
+        this.track.artistsName = this.track.artistsName.map(artist => artist.replaceAll("+"," "));
+  
         this.isLoading = false;
         this.isFetchError.value = false;
         this.isFetchError.message = "";
-      });
-    } catch (e: any) {
-      this.isLoading = false;
-      this.isFetchError.value = true;
-      this.isFetchError.message = e.message;
-      console.error(e);
-      
-    }
+        Notiflix.Notify.success("Música convertida!")
+      },
+      error: (e) => {
+        this.isLoading = false;
+        this.isFetchError.value = true;
+        this.isFetchError.message = e.message || "Ocorreu um erro inesperado.";
+        console.error(e);
+        Notiflix.Notify.failure("Ocorreu um erro")
+      }
+    });
   }
-
   validadeDisabledButton() {
     const inputValue = this.formulario.get('link')?.value;
     console.log(inputValue);
