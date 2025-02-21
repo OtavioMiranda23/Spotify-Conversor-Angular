@@ -1,0 +1,44 @@
+<form class="form-principal" [formGroup]="formulario" (ngSubmit)="send()">
+    <mat-form-field appearance="outline">
+        <mat-label>Insira o link do Spotify da sua música</mat-label>
+        <input 
+            (change)="validadeDisabledButton()"
+            matInput 
+            formControlName="link" 
+            placeholder="Cole aqui o link da sua música" 
+            color="primary"
+        />
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline">
+        <mat-label>Selecione o link a receber convertido</mat-label>
+        <mat-select formControlName="selectedOption">
+            <mat-option *ngFor="let option of options" [value]="option">
+                {{ option.site }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button 
+        mat-raised-button 
+        color="primary" 
+        type="submit"
+        [disabled]="notShowButton"
+        style="padding: 1.5rem;"
+        >
+    Converter
+    </button>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+
+    <div class="result-search" *ngIf="track.link">
+        <span>Musica: {{ track.musicName }}</span>
+        <span>Album: {{ track.albumsName }}</span>
+        <div *ngFor="let artist of track.artistsName">
+            <span>Autor: {{ artist }}</span>
+        </div>
+        <a target="_blank" [href]="track.link">{{ track.link }}</a>
+    </div>
+    <div *ngIf="isFetchError.value">
+        <span>{{ isFetchError.message }}</span>
+    </div>
+</form>

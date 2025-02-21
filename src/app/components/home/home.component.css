@@ -1,0 +1,19 @@
+.form-principal {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 300px;
+    margin: 6rem auto;
+  }
+
+.result-search {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.result-search span {
+  border-bottom: 1px solid var(--primary);
+  padding-bottom: 8px;
+}
