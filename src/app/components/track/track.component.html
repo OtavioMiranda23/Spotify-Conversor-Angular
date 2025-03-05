@@ -1,0 +1,8 @@
+<div class="result-search" >
+    <span >Musica: {{ track?.musicName }}</span>
+    <span > {{ track?.albumsName }}</span>
+    <div  *ngFor="let artist of track.artistsName">
+        <span >Autor: {{ artist }}</span>
+    </div>
+    <a target="_blank"  [href]="track?.link">{{ track?.link }}</a>
+</div>

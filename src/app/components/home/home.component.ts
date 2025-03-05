@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { HttpService } from '../../services/http.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import Notiflix from 'notiflix';
+import { Track, TrackComponent } from '../track/track.component';
 
 @Component({
   selector: 'app-home',
@@ -20,16 +21,17 @@ import Notiflix from 'notiflix';
     MatFormFieldModule, 
     MatSelectModule,
     MatProgressSpinnerModule,
+    TrackComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  track = {
+  track: Track = {
     musicName: "",
     albumsName: "",
     artistsName: [""],
-    link: ""
+    link: "",
   };
   options = [
     { 
@@ -44,7 +46,7 @@ export class HomeComponent {
   formulario = new FormGroup({
     link: new FormControl('', [
       Validators.required,
-      Validators.pattern(/^(https?:\/\/)?(www\.)?(open\.spotify\.com)\/.+(\/track\/).+$/)
+      Validators.pattern(/^(https?:\/\/)?open\.spotify\.com\/track\/[a-zA-Z0-9]+$/)
     ]),
     selectedOption: new FormControl(this.options[0])
   });
@@ -54,6 +56,8 @@ export class HomeComponent {
     value: false,
     message: ""
   };
+
+
   constructor(private http: HttpService) {
     Notiflix.Notify.init({
       position: 'center-top'
@@ -66,16 +70,17 @@ export class HomeComponent {
     const site = this.formulario.get("selectedOption")?.value?.value;
     const body = {
       link,
-      siteValue: site
+      siteToConvert: site
     };
+    console.log(body);
+    
     this.http.createYoutubeLink(body).subscribe({
       next: (data) => {
-        this.track = data;
+        this.track = {...data };
         this.track.link = this.track.link.replace("%3F", "?").replace("%3D", "=");
         this.track.musicName = this.track.musicName.replaceAll("+", " ");
         this.track.albumsName = this.track.albumsName.replaceAll("+", " ");
         this.track.artistsName = this.track.artistsName.map(artist => artist.replaceAll("+"," "));
-  
         this.isLoading = false;
         this.isFetchError.value = false;
         this.isFetchError.message = "";
@@ -93,7 +98,7 @@ export class HomeComponent {
   validadeDisabledButton() {
     const inputValue = this.formulario.get('link')?.value;
     console.log(inputValue);
-    const validRegexLink = /^(https?:\/\/)?(www\.)?(open\.spotify\.com)\/.+(\/track\/).+$/
+    const validRegexLink = /^(https?:\/\/)?open\.spotify\.com\/track\/[a-zA-Z0-9]+$/
     if (!inputValue) {
       this.notShowButton = true;
       return;

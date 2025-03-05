@@ -34,13 +34,5 @@
     Converter
     </button>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
-
-    <div class="result-search" *ngIf="track.link">
-        <span>Musica: {{ track.musicName }}</span>
-        <span>Album: {{ track.albumsName }}</span>
-        <div *ngFor="let artist of track.artistsName">
-            <span>Autor: {{ artist }}</span>
-        </div>
-        <a target="_blank" [href]="track.link">{{ track.link }}</a>
-    </div>
+    <app-track *ngIf="track.link" [track]="track" />
 </form>
